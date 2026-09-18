@@ -1,137 +1,287 @@
 <!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0b6b5c">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Ställplatser">
-  <meta name="description" content="Ställplatslistan - söder till norr">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>Ställplats listan - söder till norr</title>
-  <style>
-    :root{--bg:#f5f7f6;--card:#fff;--text:#17312b;--muted:#66756f;--line:#dfe7e3;--accent:#0b6b5c;--accent2:#e5f2ee;--danger:#b42318;--shadow:0 2px 12px rgba(0,0,0,.06);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif}
-    *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text)}body{padding-bottom:env(safe-area-inset-bottom)}
-    header{position:sticky;top:0;z-index:10;background:rgba(245,247,246,.95);backdrop-filter:blur(12px);padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;border-bottom:1px solid var(--line)}
-    h1{font-size:20px;margin:0 0 3px;letter-spacing:-.2px}.sub{font-size:12px;color:var(--muted)}
-    .search{margin-top:10px;display:flex;gap:8px}.search input{flex:1;min-width:0;font-size:17px;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none}.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent2)}
-    .controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.controls select,.controls button{width:100%;padding:10px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:15px;color:var(--text)}
-    main{padding:12px 12px 28px;max-width:900px;margin:auto}.count{font-size:13px;color:var(--muted);margin:2px 2px 10px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;margin-bottom:10px;box-shadow:var(--shadow)}
-    .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.name{font-size:17px;font-weight:700;line-height:1.2}.place{font-size:13px;color:var(--muted);margin-top:3px}.badge{font-size:12px;padding:5px 8px;border-radius:999px;background:var(--accent2);color:var(--accent);white-space:nowrap}
-    .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.meta div{background:#f7faf8;border-radius:10px;padding:8px 9px}.label{font-size:11px;color:var(--muted)}.value{font-size:14px;font-weight:600;margin-top:2px}
-    .actions{display:flex;gap:8px;margin-top:10px}.actions button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;font-size:14px}.actions .primary{background:var(--accent);border-color:var(--accent);color:#fff}.actions .fav{flex:0 0 48px}
-    .fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:20;width:56px;height:56px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-size:30px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-    dialog{width:min(92vw,520px);border:0;border-radius:18px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,.25)}dialog::backdrop{background:rgba(0,0,0,.35)}.dlg{padding:18px}.dlg h2{margin:0 0 12px;font-size:19px}.field{margin:10px 0}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:16px}.dlg-actions{display:flex;gap:8px;margin-top:15px}.dlg-actions button{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:15px}.dlg-actions .save{background:var(--accent);border-color:var(--accent);color:#fff}
-    .empty{text-align:center;color:var(--muted);padding:30px 12px}.smallbtn{font-size:12px;border:0;background:transparent;color:var(--accent);padding:4px}
-    @media(min-width:700px){.controls{grid-template-columns:1.2fr .8fr .8fr}.card{padding:15px}.meta{grid-template-columns:repeat(4,1fr)}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ställplats listan - söder till norr</title>
+<meta name="description" content="Lättviktig och iPhone-anpassad lista över ställplatser i Sverige, söder till norr.">
+<meta name="theme-color" content="#234f7d">
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--ink:#18334c;--muted:#687787;--line:#dce3e9;--accent:#234f7d;--accent-soft:#edf3f8;--danger:#9b303a;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:#17212b;font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:14px}
+header{background:var(--accent);color:#fff;border-radius:16px;padding:18px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+h1{margin:0 0 5px;font-size:24px;line-height:1.15}
+.subtitle{margin:0;opacity:.92;font-size:13px}
+.controls{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:var(--shadow)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input,select,button{font:inherit;border-radius:12px;border:1px solid #cfd8df;min-height:46px;padding:10px 12px}
+input,select{background:#fff;color:#17212b}
+button{cursor:pointer;background:#fff;color:#17212b;touch-action:manipulation}
+button:active{transform:translateY(1px)}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.danger{color:var(--danger)}
+#search{flex:1;min-width:220px;font-size:17px}
+#landskap,#sort{flex:1;min-width:150px}
+.stats{color:var(--muted);font-size:13px;margin:9px 2px 2px}
+.table-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:10px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{position:sticky;top:0;background:#edf3f7;color:var(--ink);font-size:13px}
+tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:#fbfcfd}
+.num{width:46px;color:var(--muted)}
+.price{white-space:nowrap}.time{white-space:nowrap}.actions{white-space:nowrap}
+.addbox{display:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:var(--shadow)}
+.addbox.open{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid input{width:100%}
+.help{color:var(--muted);font-size:12px;margin-top:9px}
+.mobile-list{display:none}
+.mobile-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:9px;box-shadow:var(--shadow)}
+.mobile-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.mobile-name{font-size:18px;font-weight:700;color:var(--ink);line-height:1.2}
+.mobile-land{margin-top:4px;color:var(--muted);font-size:14px}
+.mobile-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}
+.meta-box{background:var(--accent-soft);border-radius:12px;padding:9px 10px}
+.meta-label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.meta-value{font-weight:600}
+.mobile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mobile-actions button{width:100%}
+.badge{font-size:12px;background:var(--accent-soft);color:var(--ink);padding:6px 9px;border-radius:999px;white-space:nowrap}
+@media(max-width:760px){
+  .wrap{padding:10px 10px calc(18px + env(safe-area-inset-bottom))}
+  header{border-radius:14px;padding:16px;margin-bottom:10px}
+  h1{font-size:21px}
+  .subtitle{font-size:12px}
+  .controls{border-radius:14px;padding:10px;position:sticky;top:0;z-index:5}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  #search{grid-column:1 / -1;min-width:0;width:100%;font-size:17px}
+  #landskap,#sort{min-width:0;width:100%}
+  .controls .row:nth-child(2){margin-top:7px}
+  .controls .row:nth-child(2) button{width:100%}
+  .controls .row:nth-child(2) button:nth-child(1),.controls .row:nth-child(2) button:nth-child(2){grid-column:span 1}
+  .controls .row:nth-child(2) button:nth-child(3),.controls .row:nth-child(2) button:nth-child(4){grid-column:span 1}
+  .stats{font-size:12px}
+  .table-wrap{display:none}
+  .mobile-list{display:block}
+  .addbox{border-radius:14px}
+  .grid{grid-template-columns:1fr}
+  .grid input:nth-child(n){grid-column:auto}
+  .addbox .row{display:grid;grid-template-columns:1fr 1fr;margin-top:8px}
+  .addbox .row button{width:100%}
+}
+@media(min-width:761px){.mobile-list{display:none!important}}
+@media(max-width:380px){
+  .controls .row:nth-child(2) button:nth-child(3),.controls .row:nth-child(2) button:nth-child(4){grid-column:1 / -1}
+}
+</style>
 </head>
 <body>
+<div class="wrap">
 <header>
   <h1>🚐 Ställplats listan - söder till norr</h1>
-  <div class="sub">Startpunkt: Israel Perssons väg, Åkersberga · 29 ställplatser</div>
-  <div class="search"><input id="search" type="search" placeholder="Sök ställplats, område, landskap eller pris…" autocomplete="off"><button class="smallbtn" id="clearBtn" aria-label="Rensa">Rensa</button></div>
-  <div class="controls">
-    <select id="region"><option value="">Alla landskap</option></select>
-    <select id="sort"><option value="order">Söder → norr</option><option value="name">Namn A–Ö</option><option value="region">Landskap A–Ö</option><option value="price">Pris lågt → högt</option></select>
-    <button id="favFilter">☆ Favoriter: alla</button>
-  </div>
+  <p class="subtitle">Startpunkt: Israel Perssons väg, Åkersberga. Körtiderna är ungefärliga planeringsvärden för husbil.</p>
 </header>
-<main>
-  <div class="count" id="count"></div>
-  <div id="list"></div>
-</main>
-<button class="fab" id="addBtn" aria-label="Lägg till ställplats">+</button>
 
-<dialog id="addDialog">
-  <form class="dlg" id="addForm" method="dialog">
-    <h2>Lägg till ställplats</h2>
-    <div class="field"><label>Ställplats / plats</label><input id="fName" required></div>
-    <div class="field"><label>Ort / område</label><input id="fArea"></div>
-    <div class="field"><label>Landskap</label><input id="fRegion" required></div>
-    <div class="field"><label>Pris ca</label><input id="fPrice" placeholder="t.ex. 250 kr"></div>
-    <div class="field"><label>Körtid ca från Åkersberga</label><input id="fTime" placeholder="t.ex. 3 t 45 min"></div>
-    <div class="field"><label>Koordinat eller adress (valfritt, för karta)</label><input id="fMap" placeholder="t.ex. 57.1234, 15.1234"></div>
-    <div class="dlg-actions"><button type="button" id="cancelBtn">Avbryt</button><button class="save" type="submit">Spara</button></div>
-  </form>
-</dialog>
+<section class="controls">
+  <div class="row">
+    <input id="search" type="search" placeholder="Sök på ställplats, område, landskap, pris eller tid…" autocomplete="off">
+    <select id="landskap"><option value="">Alla landskap</option></select>
+    <select id="sort"><option value="order">Söder → norr</option><option value="name">Ställplats A–Ö</option><option value="landskap">Landskap A–Ö</option><option value="price">Pris lågt → högt</option></select>
+  </div>
+  <div class="row">
+    <button class="primary" id="toggleAdd">+ Lägg till ställplats</button>
+    <button id="saveHtml">Spara uppdaterad index.html</button>
+    <button id="exportJson">💾 Spara/Exportera listan</button>
+    <button class="danger" id="resetData">Återställ PDF-listan</button>
+  </div>
+  <div class="stats" id="stats"></div>
+</section>
+
+<section class="addbox" id="addbox">
+  <div class="grid">
+    <input id="fLandscape" placeholder="Landskap" aria-label="Landskap">
+    <input id="fName" placeholder="Ställplats / plats" aria-label="Ställplats">
+    <input id="fArea" placeholder="Område" aria-label="Område">
+    <input id="fPrice" placeholder="Pris ca" aria-label="Pris">
+    <input id="fTime" placeholder="Körtid ca" aria-label="Körtid">
+  </div>
+  <div class="row" style="margin-top:9px">
+    <button class="primary" id="addRow">Lägg till</button>
+    <button id="cancelAdd">Avbryt</button>
+  </div>
+  <div class="help">Ny post läggs sist. Använd "Spara uppdaterad index.html" för att skapa en ny fil med alla ändringar inbyggda.</div>
+</section>
+
+<section class="table-wrap">
+<table>
+<thead><tr><th>#</th><th>Ställplats / plats</th><th>Område</th><th>Landskap</th><th>Pris ca</th><th>Körtid ca</th><th></th></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+</section>
+<section class="mobile-list" id="mobileList"></section>
+</div>
 
 <script>
-const DEFAULTS = [
-[1,"Norje Båtklubb","Norje / Sölvesborg","Blekinge","?","6 t 45 min"],
-[2,"Nogersunds ställplats","Nogersund / Sölvesborg","Blekinge","250 kr","6 t 50 min"],
-[3,"Kosta Safari Park","Kosta","Småland","ca 250 kr","5 t 20 min"],
-[4,"Sunset ställplats","Borgholm / Öland","Öland","fr. ca 275 kr","5 t 45 min"],
-[5,"Skeda Strand","Rydaholm / Värnamo","Småland","fr. ca 150 kr","5 t 00 min"],
-[6,"Hillerstorps hamn","Hillerstorp","Småland","?","5 t 20 min"],
-[7,"Gränsöleden / Västervik","Västervik / Gränsö","Småland","?","3 t 50 min"],
-[8,"Bondbacken / Gränsö","Västervik / Gränsö","Småland","fr. ca 100 kr","3 t 50 min"],
-[9,"Savannen","Alingsås","Västergötland","?","5 t 30 min"],
-[10,"Sandhem / Sägnernas Hus","Sandhem","Västergötland","ca 150 kr","4 t 55 min"],
-[11,"Kohagens ställplats","Sandhem","Västergötland","?","5 t 00 min"],
-[12,"The View Sweden","Brandstorp / Vättern","Västergötland","ca 200–250 kr","4 t 50 min"],
-[13,"Henåns Gästhamn","Henån / Orust","Bohuslän","ca 160–275 kr","6 t 20 min"],
-[14,"Stora Lunds naturreservat","Ödeshög","Östergötland","?","4 t 10 min"],
-[15,"Ödeshögs Skidklubb / Skönatorpet","Ödeshög","Östergötland","ca 150 kr","4 t 10 min"],
-[16,"Djäknesundet","Karlsborg","Västergötland","upp till ca 150 kr parkering","4 t 25 min"],
-[17,"The Backyard","Lidköping","Västergötland","?","4 t 50 min"],
-[18,"Granvik Vildmarkscamping","Karlsborg","Västergötland","ca 220–350 kr","4 t 20 min"],
-[19,"Spikens Fiskehamn / ställplats","Kållandsö / Lidköping","Västergötland","350 kr inkl. el","5 t 00 min"],
-[20,"Åmmebergs Båtklubb","Åmmeberg","Närke","ca 150 kr","3 t 50 min"],
-[21,"Aspa Båtklubb","Aspabruk","Närke","ca 220 kr","4 t 05 min"],
-[22,"Köping ställplats","Köping","Västmanland","?","2 t 25 min"],
-[23,"Nylada badplats","Ekolsund / Enköping","Uppland","?","1 t 45 min"],
-[24,"Koffsta ställplatser","Hedesunda","Gästrikland","ca 125 kr","2 t 50 min"],
-[25,"Offroadcamp","Nornäs / Sörsjön","Dalarna","ca 350–490 kr","4 t 20 min"],
-[26,"Ljusnedal / Lossenvägen","Ljusnedal / Funäsfjällen","Härjedalen","?","7 t 00 min"],
-[27,"Barsta Camping","Nordingrå / Höga Kusten","Ångermanland","ca 310 kr","6 t 50 min"],
-[28,"Lillängets vildmarkscamping","Bjurholms kommun","Ångermanland","kr","6 t 50 min"],
-[29,"Bredträsk vildmarkscamping","Bjurholms kommun","Ångermanland","50 kr","6 t 50 min"]
-].map(r=>({id:r[0],name:r[1],area:r[2],region:r[3],price:r[4],time:r[5],map:"",favorite:false}));
+const STORAGE_KEY = 'stallplats-listan-soder-till-norr-v2';
+const initialData = [
+  [1,'Norje Båtklubb','Norje / Sölvesborg','Blekinge','?','6 t 45 min'],
+  [2,'Nogersunds ställplats','Nogersund / Sölvesborg','Blekinge','250 kr','6 t 50 min'],
+  [3,'Kosta Safari Park','Kosta','Småland','ca 250 kr','5 t 20 min'],
+  [4,'Sunset ställplats','Borgholm / Öland','Öland','fr. ca 275 kr','5 t 45 min'],
+  [5,'Skeda Strand','Rydaholm / Värnamo','Småland','fr. ca 150 kr','5 t 00 min'],
+  [6,'Hillerstorps hamn','Hillerstorp','Småland','?','5 t 20 min'],
+  [7,'Gränsöleden / Västervik','Västervik / Gränsö','Småland','?','3 t 50 min'],
+  [8,'Bondbacken / Gränsö','Västervik / Gränsö','Småland','fr. ca 100 kr','3 t 50 min'],
+  [9,'Savannen','Alingsås','Västergötland','?','5 t 30 min'],
+  [10,'Sandhem / Sägnernas Hus','Sandhem','Västergötland','ca 150 kr','4 t 55 min'],
+  [11,'Kohagens ställplats','Sandhem','Västergötland','?','5 t 00 min'],
+  [12,'The View Sweden','Brandstorp / Vättern','Västergötland','ca 200–250 kr','4 t 50 min'],
+  [13,'Henåns Gästhamn','Henån / Orust','Bohuslän','ca 160–275 kr','6 t 20 min'],
+  [14,'Stora Lunds naturreservat','Ödeshög','Östergötland','?','4 t 10 min'],
+  [15,'Ödeshögs Skidklubb / Skönatorpet','Ödeshög','Östergötland','ca 150 kr','4 t 10 min'],
+  [16,'Djäknesundet','Karlsborg','Västergötland','upp till ca 150 kr parkering','4 t 25 min'],
+  [17,'The Backyard','Lidköping','Västergötland','?','4 t 50 min'],
+  [18,'Granvik Vildmarkscamping','Karlsborg','Västergötland','ca 220–350 kr','4 t 20 min'],
+  [19,'Spikens Fiskehamn / ställplats','Kållandsö / Lidköping','Västergötland','350 kr inkl. el','5 t 00 min'],
+  [20,'Åmmebergs Båtklubb','Åmmeberg','Närke','ca 150 kr','3 t 50 min'],
+  [21,'Aspa Båtklubb','Aspabruk','Närke','ca 220 kr','4 t 05 min'],
+  [22,'Köping ställplats','Köping','Västmanland','?','2 t 25 min'],
+  [23,'Nylada badplats','Ekolsund / Enköping','Uppland','?','1 t 45 min'],
+  [24,'Koffsta ställplatser','Hedesunda','Gästrikland','ca 125 kr','2 t 50 min'],
+  [25,'Offroadcamp','Nornäs / Sörsjön','Dalarna','ca 350–490 kr','4 t 20 min'],
+  [26,'Ljusnedal / Lossenvägen','Ljusnedal / Funäsfjällen','Härjedalen','?','7 t 00 min'],
+  [27,'Barsta Camping','Nordingrå / Höga Kusten','Ångermanland','ca 310 kr','6 t 50 min'],
+  [28,'Lillängets vildmarkscamping','Bjurholms kommun','Ångermanland','kr','6 t 50 min'],
+  [29,'Bredträsk vildmarkscamping','Bjurholms kommun','Ångermanland','50 kr','6 t 50 min']
+];
 
-const KEY='stallplatser-pwa-v1';
-let data=load();
-let favOnly=false;
-const els={search:document.getElementById('search'),region:document.getElementById('region'),sort:document.getElementById('sort'),favFilter:document.getElementById('favFilter'),count:document.getElementById('count'),list:document.getElementById('list'),clear:document.getElementById('clearBtn'),dialog:document.getElementById('addDialog'),add:document.getElementById('addBtn'),cancel:document.getElementById('cancelBtn'),form:document.getElementById('addForm')};
-
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY));return Array.isArray(x)?x:structuredClone(DEFAULTS)}catch{return structuredClone(DEFAULTS)}}
-function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&#92;','"':'&quot;'}[c]))}
-function mapUrl(item){
-  const q=item.map?.trim()||[item.name,item.area].filter(Boolean).join(', ');
-  return 'https://maps.apple.com/?q='+encodeURIComponent(q);
+function cloneData(){return initialData.map(r=>r.slice());}
+function loadData(){
+  try{const s=localStorage.getItem(STORAGE_KEY); if(s){const d=JSON.parse(s); if(Array.isArray(d)) return d;} }catch(e){}
+  return cloneData();
 }
-function priceNum(s){const m=String(s||'').replace(/\s/g,'').match(/\d+(?:[,.]\d+)?/);return m?Number(m[0].replace(',','.')):999999}
-function renderRegions(){const current=els.region.value;const regions=[...new Set(data.map(x=>x.region).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'sv'));els.region.innerHTML='<option value="">Alla landskap</option>'+regions.map(r=>`<option>${esc(r)}</option>`).join('');if(regions.includes(current))els.region.value=current}
+let data = loadData();
+
+const $ = id => document.getElementById(id);
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){}}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function priceNumber(s){const m=String(s).replace(/\s/g,'').replace(',','.').match(/\d+(?:\.\d+)?/);return m?Number(m[0]):Infinity;}
+function mins(s){const m=String(s).match(/(?:(\d+)\s*t)?\s*(?:(\d+)\s*min)?/i); if(!m)return Infinity; return (Number(m[1]||0)*60)+Number(m[2]||0);}
+function populateLandscape(){
+  const current=$('landskap').value;
+  const vals=[...new Set(data.map(r=>r[3]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'sv'));
+  $('landskap').innerHTML='<option value="">Alla landskap</option>'+vals.map(v=>`<option>${esc(v)}</option>`).join('');
+  $('landskap').value=current;
+}
+function mapsUrl(r){
+  const q=encodeURIComponent(`${r[1]}, ${r[2]}, Sverige`);
+  return `https://maps.apple.com/?q=${q}`;
+}
 function render(){
-  const q=els.search.value.trim().toLowerCase(); const reg=els.region.value; const sort=els.sort.value;
-  let arr=data.filter(x=>{const hay=[x.name,x.area,x.region,x.price,x.time].join(' ').toLowerCase();return (!q||hay.includes(q))&&(!reg||x.region===reg)&&(!favOnly||x.favorite)});
-  if(sort==='name')arr.sort((a,b)=>a.name.localeCompare(b.name,'sv')); else if(sort==='region')arr.sort((a,b)=>a.region.localeCompare(b.region,'sv')||a.name.localeCompare(b.name,'sv')); else if(sort==='price')arr.sort((a,b)=>priceNum(a.price)-priceNum(b.price)); else arr.sort((a,b)=>a.id-b.id);
-  els.count.textContent=`Visar ${arr.length} av ${data.length} ställplatser`;
-  if(!arr.length){els.list.innerHTML='<div class="empty">Ingen ställplats matchar sökningen.</div>';return}
-  els.list.innerHTML=arr.map(x=>`<article class="card">
-    <div class="top"><div><div class="name">${esc(x.name)}</div><div class="place">${esc(x.area)}</div></div><div class="badge">${esc(x.region)}</div></div>
-    <div class="meta"><div><div class="label">Pris</div><div class="value">${esc(x.price||'—')}</div></div><div><div class="label">Körtid</div><div class="value">${esc(x.time||'—')}</div></div></div>
-    <div class="actions"><button class="primary" data-map="${x.id}">🗺 Öppna karta</button><button class="fav" data-fav="${x.id}" aria-label="Favorit">${x.favorite?'★':'☆'}</button><button data-del="${x.id}">Ta bort</button></div>
+  const q=$('search').value.trim().toLocaleLowerCase('sv-SE');
+  const land=$('landskap').value;
+  let rows=data.filter(r=>{
+    const hay=r.slice(1).join(' ').toLocaleLowerCase('sv-SE');
+    return (!q||hay.includes(q)) && (!land||r[3]===land);
+  });
+  const mode=$('sort').value;
+  if(mode==='name') rows.sort((a,b)=>String(a[1]).localeCompare(String(b[1]),'sv'));
+  else if(mode==='landskap') rows.sort((a,b)=>String(a[3]).localeCompare(String(b[3]),'sv')||String(a[1]).localeCompare(String(b[1]),'sv'));
+  else if(mode==='price') rows.sort((a,b)=>priceNumber(a[4])-priceNumber(b[4]) || a[0]-b[0]);
+  else rows.sort((a,b)=>a[0]-b[0]);
+
+  $('tbody').innerHTML=rows.map(r=>`<tr>
+    <td class="num">${esc(r[0])}</td>
+    <td><strong>${esc(r[1])}</strong></td>
+    <td>${esc(r[2])}</td>
+    <td>${esc(r[3])}</td>
+    <td class="price">${esc(r[4])}</td>
+    <td class="time">${esc(r[5])}</td>
+    <td class="actions"><button data-map="${esc(r[0])}">Karta</button> <button data-del="${esc(r[0])}">Ta bort</button></td>
+  </tr>`).join('');
+
+  $('mobileList').innerHTML=rows.map(r=>`<article class="mobile-card">
+    <div class="mobile-top">
+      <div>
+        <div class="mobile-name">${esc(r[1])}</div>
+        <div class="mobile-land">${esc(r[2])}</div>
+      </div>
+      <span class="badge">#${esc(r[0])}</span>
+    </div>
+    <div class="mobile-meta">
+      <div class="meta-box"><span class="meta-label">Landskap</span><span class="meta-value">${esc(r[3])}</span></div>
+      <div class="meta-box"><span class="meta-label">Pris</span><span class="meta-value">${esc(r[4])}</span></div>
+      <div class="meta-box"><span class="meta-label">Körtid</span><span class="meta-value">${esc(r[5])}</span></div>
+      <div class="meta-box"><span class="meta-label">Område</span><span class="meta-value">${esc(r[2])}</span></div>
+    </div>
+    <div class="mobile-actions">
+      <button class="primary" data-map="${esc(r[0])}">🗺 Öppna karta</button>
+      <button class="danger" data-del="${esc(r[0])}">Ta bort</button>
+    </div>
   </article>`).join('');
+  $('stats').textContent=`Visar ${rows.length} av ${data.length} ställplatser.`;
 }
-function nextId(){return data.reduce((m,x)=>Math.max(m,Number(x.id)||0),0)+1}
 
-els.search.addEventListener('input',render);els.region.addEventListener('change',render);els.sort.addEventListener('change',render);els.clear.addEventListener('click',()=>{els.search.value='';render()});
-els.favFilter.addEventListener('click',()=>{favOnly=!favOnly;els.favFilter.textContent=favOnly?'★ Favoriter: bara':'☆ Favoriter: alla';render()});
-els.list.addEventListener('click',e=>{
-  const map=e.target.closest('[data-map]');if(map){const item=data.find(x=>x.id==map.dataset.map);location.href=mapUrl(item);return}
-  const fav=e.target.closest('[data-fav]');if(fav){const item=data.find(x=>x.id==fav.dataset.fav);item.favorite=!item.favorite;save();render();return}
-  const del=e.target.closest('[data-del]');if(del){const item=data.find(x=>x.id==del.dataset.del);if(confirm(`Ta bort "${item.name}"?`)){data=data.filter(x=>x.id!=del.dataset.del);save();renderRegions();render()}}
+function renumber(){data.forEach((r,i)=>r[0]=i+1);}
+function resetForm(){['fLandscape','fName','fArea','fPrice','fTime'].forEach(id=>$(id).value='');}
+function safeFilename(){return 'index.html';}
+function buildHtmlForExport(){
+  const raw=document.documentElement.outerHTML;
+  const serialized=JSON.stringify(data).replace(/</g,'\\u003c');
+  return raw.replace(/const initialData = \[[\s\S]*?\n\];/,`const initialData = ${serialized};`)
+    .replace(/let data = loadData\(\);/,'let data = loadData();');
+}
+$('search').addEventListener('input',render);
+$('landskap').addEventListener('change',render);
+$('sort').addEventListener('change',render);
+$('toggleAdd').addEventListener('click',()=>{$('addbox').classList.toggle('open');$('fName').focus();});
+$('cancelAdd').addEventListener('click',()=>{$('addbox').classList.remove('open');resetForm();});
+$('addRow').addEventListener('click',()=>{
+  const row=[data.length+1,$('fName').value.trim(),$('fArea').value.trim(),$('fLandscape').value.trim(),$('fPrice').value.trim()||'?', $('fTime').value.trim()||'?'];
+  if(!row[1]){alert('Ange minst ställplatsens namn.');$('fName').focus();return;}
+  data.push(row);renumber();persist();populateLandscape();render();resetForm();$('addbox').classList.remove('open');
 });
-els.add.addEventListener('click',()=>{els.form.reset();els.dialog.showModal()});els.cancel.addEventListener('click',()=>els.dialog.close());
-els.form.addEventListener('submit',e=>{e.preventDefault();data.push({id:nextId(),name:document.getElementById('fName').value.trim(),area:document.getElementById('fArea').value.trim(),region:document.getElementById('fRegion').value.trim(),price:document.getElementById('fPrice').value.trim()||'?',time:document.getElementById('fTime').value.trim()||'—',map:document.getElementById('fMap').value.trim(),favorite:false});save();renderRegions();render();els.dialog.close()});
-
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-renderRegions();render();
+function handleListAction(e){
+  const id=e.target?.dataset?.del || e.target?.dataset?.map;
+  if(!id)return;
+  const row=data.find(r=>String(r[0])===String(id));
+  if(!row)return;
+  if(e.target.dataset.map){ window.location.href=mapsUrl(row); return; }
+  if(confirm(`Ta bort "${row[1]}"?`)){data=data.filter(r=>String(r[0])!==String(id));renumber();persist();populateLandscape();render();}
+}
+$('tbody').addEventListener('click',handleListAction);
+$('mobileList').addEventListener('click',handleListAction);
+$('resetData').addEventListener('click',()=>{
+  if(confirm('Återställ till de 29 posterna från PDF-listan? Egna tillägg tas bort.')){data=cloneData();persist();populateLandscape();render();}
+});
+async function saveUpdatedHtml(){
+  const html='<!doctype html>\n'+buildHtmlForExport();
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const file=new File([blob],'Ställplats listan - söder till norr.html',{type:'text/html'});
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:'Ställplats listan - söder till norr'});return;}catch(e){if(e?.name==='AbortError')return;}
+  }
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+$('saveHtml').addEventListener('click',saveUpdatedHtml);
+async function exportList(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
+  const file=new File([blob],'stallplatser-backup.json',{type:'application/json'});
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:'Ställplats listan - backup'});return;}catch(e){if(e?.name==='AbortError')return;}
+  }
+  const a=document.createElement('a');
+  const url=URL.createObjectURL(blob);
+  a.href=url;a.download='stallplatser-backup.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$('exportJson').addEventListener('click',exportList);
+populateLandscape();render();
 </script>
 </body>
 </html>
